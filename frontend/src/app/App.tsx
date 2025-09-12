@@ -1,37 +1,23 @@
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { scrollToBottom } from "@/lib";
 import { Clipboard, Copy, SendHorizontal } from "lucide-react";
 import { useRef, useState } from "react";
 
-const mockMessages = [
-  {
-    id: 1,
-    sender: "PC",
-    text: "https://docs.example.com/123",
-    time: "10:14 PM",
-  },
-  {
-    id: 2,
-    sender: "Phone",
-    text: "221B Baker Street, London",
-    time: "10:14 PM",
-  },
-  {
-    id: 3,
-    sender: "PC",
-    text: "Meeting at 4:15, Zoom link: zoom.us/xyz",
-    time: "10:14 PM",
-  },
-];
+type Message = {
+  id: number;
+  sender: string;
+  text: string;
+  time: string;
+};
 
 function App() {
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const lastId = useRef(3);
-  const [messages, setMessages] = useState([...mockMessages]);
+  const lastId = useRef(1);
+  const [messages, setMessages] = useState<Message[]>([]);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
     event.preventDefault();
@@ -42,11 +28,10 @@ function App() {
     const message = inputRef.current.value;
     if (message.trim().length === 0) return;
 
-    lastId.current++;
     setMessages((prev) => [
       ...prev,
       {
-        id: lastId.current,
+        id: lastId.current++,
         sender: "PC",
         text: message,
         time: "now",
@@ -67,8 +52,8 @@ function App() {
         <ScrollArea className="h-full">
           <div className="grid gap-3" ref={messagesContainerRef}>
             {messages.map((m) => (
-              <Card className="gap-0" key={m.id}>
-                <div className="flex text-sm">
+              <Card className="gap-0 px-0" key={m.id}>
+                <CardHeader className="flex text-sm">
                   {m.sender} -{" "}
                   <span className="text-muted-foreground">{m.time}</span>
                   <Button
@@ -79,8 +64,8 @@ function App() {
                   >
                     <Copy className="-scale-x-100" />
                   </Button>
-                </div>
-                <span className="font-semibold">{m.text}</span>
+                </CardHeader>
+                <CardContent className="font-semibold">{m.text}</CardContent>
               </Card>
             ))}
           </div>
