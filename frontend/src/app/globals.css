@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+input[type="button"],
+button {
+  @apply cursor-pointer;
+}
