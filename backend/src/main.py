@@ -1,10 +1,14 @@
 import uvicorn
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from datetime import datetime
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from typing import Any
 
 from managers import WebSocketManager
+from routers import chat_session_router, ws_chat_session_router
 
 app = FastAPI()
+manager = WebSocketManager()
 
 app.add_middleware(
     CORSMiddleware,
@@ -14,19 +18,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-manager = WebSocketManager()
+
+@app.get("/")
+def root() -> dict[str, Any]:
+    return {
+        "title": "Clipboard Chat Backend",
+        "status": "OK",
+        "timestamp": datetime.now(),
+    }
 
 
-@app.websocket("/ws/chat/{session_id}")
-async def websocket_endpoint(websocket: WebSocket, session_id: str):
-    await manager.connect(websocket)
-    try:
-        while True:
-            message = await websocket.receive_text()
-            await manager.broadcast(message)
-    except WebSocketDisconnect:
-        manager.disconnect(websocket)
-
+app.include_router(chat_session_router)
+app.include_router(ws_chat_session_router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=3000)
