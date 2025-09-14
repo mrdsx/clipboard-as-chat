@@ -13,7 +13,7 @@ type Message = {
   time: string;
 };
 
-function App() {
+function ChatSessionPage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const lastId = useRef(1);
@@ -90,4 +90,4 @@ function App() {
   );
 }
 
-export { App };
+export { ChatSessionPage };
