@@ -1,20 +1,35 @@
 import uuid
 from fastapi import APIRouter, Depends
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-
 from database import get_session
-from models import ChatSession
-from schemas import CreateChatSessionSchema
+from models import ChatMessage, ChatSession
+from schemas import CreateChatSessionSchema, ChatMessageSchema
 from utils import get_chat_session_creation_and_expiration_datetime
 
 
 router = APIRouter()
 
 
+@router.get("/chat/{session_uuid}/messages", response_model=list[ChatMessageSchema])
+async def get_chat_messages(
+    session_uuid: str,
+    session: AsyncSession = Depends(get_session),
+):
+    results = await session.execute(
+        select(ChatSession, ChatMessage)
+        .join(ChatMessage, ChatSession.id == ChatMessage.session_id)
+        .where(ChatSession.session_uuid == session_uuid)
+    )
+
+    return [chat_message for _chat_session, chat_message in results]
+
+
 @router.post("/chat")
 async def create_chat_session(
-    chat_session: CreateChatSessionSchema, session: AsyncSession = Depends(get_session)
+    chat_session: CreateChatSessionSchema,
+    session: AsyncSession = Depends(get_session),
 ):
     session_uuid = str(uuid.uuid4())
     creation_time, expiration_time = get_chat_session_creation_and_expiration_datetime(
