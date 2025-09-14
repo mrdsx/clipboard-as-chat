@@ -12,7 +12,6 @@ expiration_timedelta: dict[ExpiresIn, timedelta] = {
 def get_chat_session_creation_and_expiration_datetime(
     expires_in: ExpiresIn,
 ) -> tuple[datetime, datetime]:
-    print(expires_in)
     creation_datetime = datetime.now()
     expiration_datetime = creation_datetime + expiration_timedelta.get(
         expires_in, timedelta(seconds=0)

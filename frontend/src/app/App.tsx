@@ -1,26 +1,34 @@
-import { ChatPage } from "@/components/ChatPage";
-import { CreateSessionPage } from "@/components/CreateSessionPage";
-import { Home } from "@/components/Home";
 import { DARK_MODE_LOCAL_STORAGE_KEY } from "@/features/theme";
+import { Chat, CreateSession, Home } from "@/pages";
 import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
+import { Toaster } from "sonner";
 
 function App() {
+  const isDarkMode = JSON.parse(
+    localStorage.getItem(DARK_MODE_LOCAL_STORAGE_KEY) || "false",
+  );
+
   useEffect(() => {
-    const isDarkMode = JSON.parse(
-      localStorage.getItem(DARK_MODE_LOCAL_STORAGE_KEY) || "false",
-    );
     document.body.classList.toggle("dark", isDarkMode);
   }, []);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/create" element={<CreateSessionPage />} />
-        <Route path="/chat/:sessionUUID" element={<ChatPage />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <Toaster
+        theme={isDarkMode ? "dark" : "light"}
+        position="top-right"
+        richColors
+        expand
+      />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/create" element={<CreateSession />} />
+          <Route path="/chat/:sessionUUID" element={<Chat />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 

@@ -13,7 +13,13 @@ async function apiFetch<TResponse extends Record<string, any>>(
   path: Path,
   options?: ApiClientOptions,
 ): Promise<TResponse> {
-  const res = await fetch(`${BASE_API_HTTP_URL}${path}`, options?.requestInit);
+  try {
+    var res = await fetch(`${BASE_API_HTTP_URL}${path}`, options?.requestInit);
+  } catch {
+    throw new Error(
+      options?.errorMessage || "An error occurred while fetching data",
+    );
+  }
   const data = await res.json();
 
   if (res.ok) return data;

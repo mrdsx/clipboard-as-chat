@@ -32,21 +32,24 @@ function ChatContextProvider({ children }: React.PropsWithChildren) {
   >(null);
 
   useEffect(() => {
-    if (messagesQuery.data !== undefined) {
-      setClientMessages(messagesQuery.data);
-    }
-  }, [messagesQuery.data]);
+    chatSocket.addEventListener("open", () => setChatStatus("Online"));
+    chatSocket.addEventListener("close", () => setChatStatus("Offline"));
+  }, []);
 
-  if (messagesQuery.isError) navigate("/");
-
-  chatSocket.addEventListener("open", () => setChatStatus("Online"));
-  chatSocket.addEventListener("close", () => setChatStatus("Offline"));
   chatSocket.addEventListener("message", (event) => {
     if (clientMessages !== null) {
       const newClientMessage: MessageResponse = JSON.parse(event.data);
       setClientMessages([...clientMessages, newClientMessage]);
     }
   });
+
+  useEffect(() => {
+    if (messagesQuery.data !== undefined) {
+      setClientMessages(messagesQuery.data);
+    }
+  }, [messagesQuery.data]);
+
+  if (messagesQuery.isError) navigate("/");
 
   function handleSendMessage(): void {
     if (!inputRef.current || !messagesContainerRef.current) {

@@ -1,6 +1,6 @@
 import { Link } from "react-router";
-import { Button } from "./ui/button";
-import { Card, CardContent, CardHeader } from "./ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 function Home() {
   return (
