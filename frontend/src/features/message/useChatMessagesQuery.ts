@@ -10,6 +10,7 @@ function useChatMessagesQuery(sessionUUID: string | undefined) {
         requestInit: { signal },
       });
     },
+    retry: false,
   });
 
   return query;
