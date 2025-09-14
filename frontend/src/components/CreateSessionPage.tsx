@@ -12,7 +12,7 @@ import {
 import { useRef } from "react";
 import { FormField } from "./FormField";
 
-export default function CreateSessionPage() {
+function CreateSessionPage() {
   const sessionNameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const expiryRef = useRef<string>("1h");
@@ -84,3 +84,4 @@ export default function CreateSessionPage() {
     </Card>
   );
 }
+export { CreateSessionPage };

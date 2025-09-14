@@ -1,4 +1,4 @@
-import CreateSessionPage from "@/components/CreateSessionPage";
+import { CreateSessionPage } from "@/components/CreateSessionPage";
 import { Home } from "@/components/Home";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
