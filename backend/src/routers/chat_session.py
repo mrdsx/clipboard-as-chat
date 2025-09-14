@@ -1,5 +1,5 @@
 import uuid
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -17,6 +17,16 @@ async def get_chat_messages(
     session_uuid: str,
     session: AsyncSession = Depends(get_session),
 ):
+    result = await session.execute(
+        select(ChatSession).where(ChatSession.session_uuid == session_uuid),
+    )
+    db_chat_session = result.scalar()
+    if db_chat_session is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Chat session not found",
+        )
+
     results = await session.execute(
         select(ChatSession, ChatMessage)
         .join(ChatMessage, ChatSession.id == ChatMessage.session_id)
