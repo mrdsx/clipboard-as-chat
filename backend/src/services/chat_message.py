@@ -7,7 +7,7 @@ from models import ChatMessage
 
 async def save_chat_message(
     chat_session_id: int | Column[int], text: str, session: AsyncSession
-):
+) -> ChatMessage:
     new_chat_message = ChatMessage(
         session_id=chat_session_id,
         text=text,
@@ -15,3 +15,6 @@ async def save_chat_message(
     )
     session.add(new_chat_message)
     await session.commit()
+    await session.refresh(new_chat_message)
+
+    return new_chat_message

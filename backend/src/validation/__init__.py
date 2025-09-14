@@ -1,3 +1,3 @@
-from .ws_chat_session import ws_validate_chat_session
+from .chat_session import validate_chat_session
 
-__all__ = ["ws_validate_chat_session"]
+__all__ = ["validate_chat_session"]

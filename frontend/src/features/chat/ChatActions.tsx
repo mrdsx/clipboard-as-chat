@@ -1,24 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { ReactRef } from "@/lib";
-import { Clipboard, SendHorizontal } from "lucide-react";
+import { Clipboard } from "lucide-react";
+import { useChatContext } from "./ChatContextProvider";
 
-type ChatActionsProps = {
-  inputRef: ReactRef<HTMLInputElement>;
-  messagesContainerRef: ReactRef<HTMLDivElement>;
-};
+function ChatActions() {
+  const { inputRef, handleSendMessage } = useChatContext();
 
-function ChatActions({ inputRef, messagesContainerRef }: ChatActionsProps) {
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
-    event.preventDefault();
-    if (!inputRef.current || !messagesContainerRef.current) {
-      return;
-    }
-
-    const message = inputRef.current.value;
-    if (message.trim().length === 0) return;
-
-    console.log(inputRef.current.value);
+  function handleKeyDown(e: React.KeyboardEvent): void {
+    if (e.key === "Enter") handleSendMessage();
   }
 
   async function handlePaste(): Promise<void> {
@@ -27,21 +16,23 @@ function ChatActions({ inputRef, messagesContainerRef }: ChatActionsProps) {
   }
 
   return (
-    <form className="flex items-center gap-3" onSubmit={handleSubmit}>
+    <div className="xs:flex-row flex flex-col items-center gap-3">
       <Input
         className="relative p-5"
         placeholder="Enter a text..."
         ref={inputRef}
+        onKeyDown={handleKeyDown}
       />
-      <Button type="button" variant="outline" onClick={handlePaste}>
+      <Button
+        className="xs:w-fit w-full"
+        type="button"
+        variant="outline"
+        onClick={handlePaste}
+      >
         <Clipboard />
         Paste
       </Button>
-      <Button type="submit">
-        <SendHorizontal />
-        Send
-      </Button>
-    </form>
+    </div>
   );
 }
 

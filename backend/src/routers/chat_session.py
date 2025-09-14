@@ -7,6 +7,7 @@ from database import get_session
 from models import ChatMessage, ChatSession
 from schemas import CreateChatSessionSchema, ChatMessageSchema
 from utils import get_chat_session_creation_and_expiration_datetime
+from validation import validate_chat_session
 
 
 router = APIRouter()
@@ -17,15 +18,11 @@ async def get_chat_messages(
     session_uuid: str,
     session: AsyncSession = Depends(get_session),
 ):
-    result = await session.execute(
-        select(ChatSession).where(ChatSession.session_uuid == session_uuid),
+    _db_chat_session, error_message, http_code = await validate_chat_session(
+        session_uuid, session
     )
-    db_chat_session = result.scalar()
-    if db_chat_session is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Chat session not found",
-        )
+    if http_code != status.HTTP_200_OK:
+        raise HTTPException(status_code=http_code, detail=error_message)
 
     results = await session.execute(
         select(ChatSession, ChatMessage)

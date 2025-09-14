@@ -1,24 +1,14 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import type { ReactRef } from "@/lib";
 import { LoaderCircle } from "lucide-react";
-import { useNavigate, useParams } from "react-router";
+import { useChatContext } from "../chat";
 import { MessageCard } from "./MessageCard";
-import { useChatMessagesQuery } from "./useChatMessagesQuery";
 
-function Messages({
-  messagesContainerRef,
-}: {
-  messagesContainerRef: ReactRef<HTMLDivElement>;
-}) {
-  const navigate = useNavigate();
-  const { sessionUUID } = useParams<{ sessionUUID: string }>();
+function Messages() {
   const {
-    data: messages,
-    isError,
-    isPending,
-  } = useChatMessagesQuery(sessionUUID);
-
-  if (isError) navigate("/");
+    clientMessages: messages,
+    messagesContainerRef,
+    messagesQuery: { isPending },
+  } = useChatContext();
 
   if (isPending) {
     return (
