@@ -1,0 +1,2 @@
+const DARK_MODE_LOCAL_STORAGE_KEY = "isDarkMode";
+export { DARK_MODE_LOCAL_STORAGE_KEY };
