@@ -1,0 +1,35 @@
+import uuid
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+
+from database import get_session
+from models import ChatSession
+from schemas import CreateChatSessionSchema
+from utils import get_chat_session_creation_and_expiration_datetime
+
+
+router = APIRouter()
+
+
+@router.post("/chat")
+async def create_chat_session(
+    chat_session: CreateChatSessionSchema, session: AsyncSession = Depends(get_session)
+):
+    session_uuid = str(uuid.uuid4())
+    creation_time, expiration_time = get_chat_session_creation_and_expiration_datetime(
+        chat_session.expires_in
+    )
+
+    new_chat_session = ChatSession(
+        session_uuid=session_uuid,
+        session_name=chat_session.session_name,
+        password=chat_session.password,
+        created_at=creation_time,
+        expires_at=expiration_time,
+    )
+    session.add(new_chat_session)
+    await session.commit()
+    await session.refresh(new_chat_session)
+
+    return {"session_uuid": session_uuid}
