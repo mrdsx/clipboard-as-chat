@@ -17,6 +17,7 @@ type UseChatStatusResult = {
   inputRef: ReactRef<HTMLInputElement>;
   messagesContainerRef: ReactRef<HTMLDivElement>;
   messagesQuery: UseQueryResult<MessageResponse[], Error>;
+  sessionUUID: string | undefined;
   handleSendMessage(): void;
 };
 
@@ -56,6 +57,7 @@ function useChat(): UseChatStatusResult {
     inputRef,
     messagesContainerRef,
     messagesQuery,
+    sessionUUID,
     handleSendMessage,
   };
 }

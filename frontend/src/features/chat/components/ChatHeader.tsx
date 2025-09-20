@@ -2,6 +2,7 @@ import { ToggleThemeButton } from "@/features/theme";
 import { cn } from "@/lib";
 import { useChatContext } from "../ChatContextProvider";
 import { getChatStatusStyles } from "../utils";
+import { ShareSessionDialog } from "./ShareSessionDialog";
 
 function ChatHeader() {
   const { chatStatus } = useChatContext();
@@ -15,7 +16,10 @@ function ChatHeader() {
           {chatStatus}
         </span>
       )}
-      <ToggleThemeButton />
+      <div className="flex gap-2">
+        <ShareSessionDialog />
+        <ToggleThemeButton />
+      </div>
     </div>
   );
 }
