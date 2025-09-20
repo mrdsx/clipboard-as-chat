@@ -1,7 +1,7 @@
 import { ToggleThemeButton } from "@/features/theme";
 import { cn } from "@/lib";
-import { useChatContext } from "./ChatContextProvider";
-import { getChatStatusStyles } from "./utils";
+import { useChatContext } from "../ChatContextProvider";
+import { getChatStatusStyles } from "../utils";
 
 function ChatHeader() {
   const { chatStatus } = useChatContext();

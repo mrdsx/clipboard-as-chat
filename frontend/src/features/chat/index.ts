@@ -1,5 +1,4 @@
-export * from "./ChatActions";
 export * from "./ChatContextProvider";
-export * from "./ChatHeader";
+export * from "./components";
 export * from "./services";
 export * from "./types";

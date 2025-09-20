@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Clipboard } from "lucide-react";
-import { useChatContext } from "./ChatContextProvider";
+import { useChatContext } from "../ChatContextProvider";
 
 function ChatActions() {
   const { inputRef, handleSendMessage } = useChatContext();
@@ -24,7 +24,7 @@ function ChatActions() {
         onKeyDown={handleKeyDown}
       />
       <Button
-        className="xs:w-fit w-full"
+        className="xs:w-fit xs:h-full h-fit w-full"
         type="button"
         variant="outline"
         onClick={handlePaste}

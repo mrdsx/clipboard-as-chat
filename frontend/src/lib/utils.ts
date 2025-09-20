@@ -6,7 +6,7 @@ function cn(...inputs: ClassValue[]): string {
 }
 
 function scrollToBottom(element: HTMLElement | null): void {
-  element?.scrollIntoView(false);
+  element?.scrollIntoView({ behavior: "smooth", block: "end" });
 }
 
 export { cn, scrollToBottom };

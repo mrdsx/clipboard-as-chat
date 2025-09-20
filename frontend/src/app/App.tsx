@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { Toaster } from "sonner";
 
 function App() {
-  const isDarkMode = JSON.parse(
+  const isDarkMode: boolean = JSON.parse(
     localStorage.getItem(DARK_MODE_LOCAL_STORAGE_KEY) || "false",
   );
 

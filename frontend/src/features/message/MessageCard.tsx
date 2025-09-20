@@ -8,7 +8,7 @@ function MessageCard({ message }: { message: MessageResponse }) {
   const formattedTime = `${dt.getHours()}:${dt.getMinutes()} ${dt.getDate()}-${dt.getMonth() + 1}-${dt.getFullYear()}`;
 
   return (
-    <Card className="gap-0 px-0" key={message.id}>
+    <Card className="px-0" key={message.id}>
       <CardHeader className="flex text-sm">
         <span className="text-muted-foreground">{formattedTime}</span>
         <Button
@@ -20,7 +20,9 @@ function MessageCard({ message }: { message: MessageResponse }) {
           <Copy className="-scale-x-100" />
         </Button>
       </CardHeader>
-      <CardContent className="font-semibold">{message.text}</CardContent>
+      <CardContent className="line-clamp-6 font-semibold break-all">
+        {message.text}
+      </CardContent>
     </Card>
   );
 }

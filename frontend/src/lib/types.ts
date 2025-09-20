@@ -1,3 +1,5 @@
 type ReactRef<T> = React.RefObject<T | null>;
 
-export type { ReactRef };
+type ReactSetState<T> = React.Dispatch<React.SetStateAction<T>>;
+
+export type { ReactRef, ReactSetState };
