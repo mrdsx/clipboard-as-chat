@@ -2,10 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Copy } from "lucide-react";
 import type { MessageResponse } from "./types";
+import { getMessageCreationTime } from "./utils";
 
 function MessageCard({ message }: { message: MessageResponse }) {
-  const dt = new Date(message.created_at);
-  const formattedTime = `${dt.getHours()}:${dt.getMinutes()} ${dt.getDate()}-${dt.getMonth() + 1}-${dt.getFullYear()}`;
+  const date = new Date(message.created_at);
+  const formattedTime = getMessageCreationTime(date);
 
   return (
     <Card className="px-0" key={message.id}>
