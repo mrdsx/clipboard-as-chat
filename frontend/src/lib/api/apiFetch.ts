@@ -1,8 +1,10 @@
 import type { Path } from "./types";
 import { isBaseAPIErrorResponse } from "./utils";
 
-const BASE_API_HTTP_URL = "http://127.0.0.1:3000";
-const BASE_API_WS_URL = "ws://127.0.0.1:3000";
+const BASE_API_HTTP_URL =
+  import.meta.env.VITE_API_HTTPS_URL || "http://127.0.0.1:3000";
+const BASE_API_WS_URL =
+  import.meta.env.VITE_API_WS_URL || "ws://127.0.0.1:3000";
 
 type ApiClientOptions = {
   requestInit?: RequestInit;
