@@ -4,10 +4,10 @@ import { Clipboard } from "lucide-react";
 import { useChatContext } from "../ChatContextProvider";
 
 function ChatActions() {
-  const { inputRef, handleSendMessage } = useChatContext();
+  const { chatStatus, inputRef, handleSendMessage } = useChatContext();
 
   function handleKeyDown(e: React.KeyboardEvent): void {
-    if (e.key === "Enter") handleSendMessage();
+    if (e.key === "Enter" && chatStatus === "Online") handleSendMessage();
   }
 
   async function handlePaste(): Promise<void> {
@@ -22,12 +22,16 @@ function ChatActions() {
         placeholder="Enter a text..."
         ref={inputRef}
         onKeyDown={handleKeyDown}
+        disabled={chatStatus !== "Online"}
+        aria-disabled={chatStatus !== "Online"}
       />
       <Button
         className="xs:w-fit xs:h-full h-fit w-full"
         type="button"
         variant="outline"
         onClick={handlePaste}
+        disabled={chatStatus !== "Online"}
+        area-disabled={String(chatStatus !== "Online")}
       >
         <Clipboard />
         Paste

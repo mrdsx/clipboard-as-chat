@@ -1,3 +1,4 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { ToggleThemeButton } from "@/features/theme";
 import { cn } from "@/lib";
 import { useChatContext } from "../ChatContextProvider";
@@ -10,15 +11,23 @@ function ChatHeader() {
 
   return (
     <div className="flex justify-between px-4 pb-4">
-      {chatStatus && (
-        <span className="flex items-center gap-2">
-          <div className={cn("size-3 rounded-full", chatStatusStyles)}></div>
-          {chatStatus}
-        </span>
-      )}
-      <div className="flex gap-2">
-        <ShareSessionDialog />
-        <ToggleThemeButton />
+      <span className="flex items-center gap-2">
+        <div className={cn("size-3 rounded-full", chatStatusStyles)}></div>
+        {chatStatus}
+      </span>
+
+      <div className="flex items-center gap-2">
+        {chatStatus === "Online" ? (
+          <>
+            <ShareSessionDialog />
+            <ToggleThemeButton />
+          </>
+        ) : (
+          <>
+            <Skeleton className="size-9 rounded-full" />
+            <Skeleton className="size-9 rounded-full" />
+          </>
+        )}
       </div>
     </div>
   );
