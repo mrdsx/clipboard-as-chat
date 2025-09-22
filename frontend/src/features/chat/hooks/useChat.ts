@@ -1,5 +1,5 @@
 import { useChatMessagesQuery, type MessageResponse } from "@/features/message";
-import { scrollToBottom, type ReactRef } from "@/lib";
+import { type ReactRef } from "@/lib";
 import type { UseQueryResult } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { useParams } from "react-router";
@@ -15,6 +15,7 @@ type UseChatStatusResult = {
   chatStatus: ChatStatus;
   clientMessages: MessageResponse[] | null;
   inputRef: ReactRef<HTMLInputElement>;
+  isAtBottomRef: React.RefObject<boolean>;
   messagesContainerRef: ReactRef<HTMLDivElement>;
   messagesQuery: UseQueryResult<MessageResponse[], Error>;
   sessionUUID: string | undefined;
@@ -28,6 +29,7 @@ function useChat(): UseChatStatusResult {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const isAtBottomRef = useRef<boolean>(true);
   const [chatStatus, setChatStatus] = useState<ChatStatus>("Pending");
   const [clientMessages, setClientMessages] = useState<
     MessageResponse[] | null
@@ -36,7 +38,11 @@ function useChat(): UseChatStatusResult {
   useChatStatusEffect({ chatSocketRef, sessionUUID, setChatStatus });
   useClientMessagesEffect({ messagesQuery, setClientMessages });
   useMessageEventEffect({ chatSocketRef, setClientMessages });
-  useScrollToBottomEffect({ clientMessages, messagesContainerRef });
+  useScrollToBottomEffect({
+    clientMessages,
+    isAtBottomRef,
+    messagesContainerRef,
+  });
 
   function handleSendMessage(): void {
     if (!inputRef.current || !chatSocketRef.current) return;
@@ -46,15 +52,13 @@ function useChat(): UseChatStatusResult {
 
     chatSocketRef.current.send(message);
     inputRef.current.value = "";
-    setTimeout(() => {
-      scrollToBottom(messagesContainerRef.current);
-    }, 10);
   }
 
   return {
     chatStatus,
     clientMessages,
     inputRef,
+    isAtBottomRef,
     messagesContainerRef,
     messagesQuery,
     sessionUUID,

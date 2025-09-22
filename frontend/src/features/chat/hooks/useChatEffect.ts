@@ -1,5 +1,5 @@
 import type { MessageResponse } from "@/features/message";
-import { type ReactRef, type ReactSetState } from "@/lib";
+import { scrollToBottom, type ReactRef, type ReactSetState } from "@/lib";
 import { BASE_API_WS_URL } from "@/lib/api";
 import type { UseQueryResult } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
@@ -79,20 +79,26 @@ function useMessageEventEffect({
 
 type ScrollToBottomEffectProps = {
   clientMessages: MessageResponse[] | null;
+  isAtBottomRef: React.RefObject<boolean>;
   messagesContainerRef: ReactRef<HTMLDivElement>;
 };
 
 function useScrollToBottomEffect({
   clientMessages,
+  isAtBottomRef,
   messagesContainerRef,
 }: ScrollToBottomEffectProps): void {
-  const isScrollingEnabled = useRef<boolean>(true);
+  const isInitialScrollingEnabled = useRef<boolean>(true);
 
   useEffect(() => {
-    if (!clientMessages || !isScrollingEnabled.current) return;
+    if (!clientMessages) return;
 
-    messagesContainerRef.current?.scrollIntoView(false);
-    isScrollingEnabled.current = false;
+    if (isInitialScrollingEnabled.current) {
+      messagesContainerRef.current?.scrollIntoView(false);
+      isInitialScrollingEnabled.current = false;
+    } else if (isAtBottomRef.current) {
+      scrollToBottom(messagesContainerRef.current);
+    }
   }, [clientMessages]);
 }
 
