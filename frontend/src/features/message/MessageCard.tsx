@@ -1,12 +1,25 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Copy } from "lucide-react";
+import { Check, Copy } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import type { MessageResponse } from "./types";
 import { getMessageCreationTime } from "./utils";
 
 function MessageCard({ message }: { message: MessageResponse }) {
   const date = new Date(message.created_at);
   const formattedTime = getMessageCreationTime(date);
+  const [isCopied, setIsCopied] = useState<boolean>(false);
+  const isCopiedTimeoutRef = useRef<NodeJS.Timeout>(undefined);
+
+  useEffect(() => {
+    if (!isCopied && !isCopiedTimeoutRef.current) return;
+
+    isCopiedTimeoutRef.current = setTimeout(() => {
+      setIsCopied(false);
+    }, 1000);
+
+    return () => clearTimeout(isCopiedTimeoutRef.current);
+  }, [isCopied]);
 
   return (
     <Card className="px-0" key={message.id}>
@@ -16,9 +29,12 @@ function MessageCard({ message }: { message: MessageResponse }) {
           className="ml-auto size-7.5 p-0"
           variant="ghost"
           size="icon"
-          onClick={() => navigator.clipboard.writeText(message.text)}
+          onClick={() => {
+            navigator.clipboard.writeText(message.text);
+            setIsCopied(true);
+          }}
         >
-          <Copy className="-scale-x-100" />
+          {isCopied ? <Check /> : <Copy className="-scale-x-100" />}
         </Button>
       </CardHeader>
       <CardContent className="line-clamp-6 font-semibold break-all">
