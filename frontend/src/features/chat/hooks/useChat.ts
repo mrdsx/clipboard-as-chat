@@ -39,6 +39,7 @@ function useChat(): UseChatStatusResult {
   useClientMessagesEffect({ messagesQuery, setClientMessages });
   useMessageEventEffect({ chatSocketRef, setClientMessages });
   useScrollToBottomEffect({
+    chatStatus,
     clientMessages,
     isAtBottomRef,
     messagesContainerRef,

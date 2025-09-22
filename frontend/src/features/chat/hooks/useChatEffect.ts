@@ -78,28 +78,33 @@ function useMessageEventEffect({
 }
 
 type ScrollToBottomEffectProps = {
+  chatStatus: ChatStatus;
   clientMessages: MessageResponse[] | null;
   isAtBottomRef: React.RefObject<boolean>;
   messagesContainerRef: ReactRef<HTMLDivElement>;
 };
 
 function useScrollToBottomEffect({
+  chatStatus,
   clientMessages,
   isAtBottomRef,
   messagesContainerRef,
 }: ScrollToBottomEffectProps): void {
-  const isInitialScrollingEnabled = useRef<boolean>(true);
+  const hasInitiallyScrolledRef = useRef(false);
 
   useEffect(() => {
-    if (!clientMessages) return;
+    if (!clientMessages || chatStatus !== "Online") return;
 
-    if (isInitialScrollingEnabled.current) {
-      messagesContainerRef.current?.scrollIntoView(false);
-      isInitialScrollingEnabled.current = false;
+    if (!hasInitiallyScrolledRef.current) {
+      messagesContainerRef.current?.scrollIntoView({
+        behavior: "instant",
+        block: "end",
+      });
+      hasInitiallyScrolledRef.current = true;
     } else if (isAtBottomRef.current) {
       scrollToBottom(messagesContainerRef.current);
     }
-  }, [clientMessages]);
+  }, [chatStatus, clientMessages]);
 }
 
 export {
