@@ -3,15 +3,17 @@ import { type ReactRef } from "@/lib";
 import type { UseQueryResult } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { useParams } from "react-router";
-import type { ChatStatus } from "../types";
+import type { ChatSessionResponse, ChatStatus } from "../types";
 import {
   useChatStatusEffect,
   useClientMessagesEffect,
   useMessageEventEffect,
   useScrollToBottomEffect,
 } from "./useChatEffect";
+import { useChatSessionQuery } from "./useChatSessionQuery";
 
 type UseChatStatusResult = {
+  chatSessionQuery: UseQueryResult<ChatSessionResponse, Error>;
   chatStatus: ChatStatus;
   clientMessages: MessageResponse[] | null;
   inputRef: ReactRef<HTMLInputElement>;
@@ -25,6 +27,7 @@ type UseChatStatusResult = {
 function useChat(): UseChatStatusResult {
   const { sessionUUID } = useParams<{ sessionUUID: string }>();
   const chatSocketRef = useRef<WebSocket>(null);
+  const chatSessionQuery = useChatSessionQuery(sessionUUID as string);
   const messagesQuery = useChatMessagesQuery(sessionUUID);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -57,6 +60,7 @@ function useChat(): UseChatStatusResult {
   }
 
   return {
+    chatSessionQuery,
     chatStatus,
     clientMessages,
     inputRef,
