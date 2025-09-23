@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Literal, Optional
 from pydantic import BaseModel
 
@@ -8,3 +9,11 @@ class CreateChatSessionSchema(BaseModel):
     session_name: str
     password: Optional[str] = None
     expires_in: ExpiresIn
+
+
+class PublicChatSessionSchema(BaseModel):
+    id: int
+    session_uuid: str
+    session_name: str
+    created_at: datetime
+    expires_at: datetime

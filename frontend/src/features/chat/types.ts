@@ -1,3 +1,11 @@
+type ChatSessionResponse = {
+  id: number;
+  session_uuid: string;
+  session_name: string;
+  created_at: string;
+  expires_at: string;
+};
+
 type ChatSessionUUIDResponse = {
   session_uuid: string;
 };
@@ -13,6 +21,7 @@ type CreateChatSession = {
 type ExpirationTime = "15m" | "1h" | "6h" | "24h";
 
 export type {
+  ChatSessionResponse,
   ChatSessionUUIDResponse,
   ChatStatus,
   CreateChatSession,

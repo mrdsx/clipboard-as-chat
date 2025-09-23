@@ -5,12 +5,26 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import get_session
 from models import ChatMessage, ChatSession
-from schemas import CreateChatSessionSchema, ChatMessageSchema
+from schemas import CreateChatSessionSchema, ChatMessageSchema, PublicChatSessionSchema
 from utils import get_chat_session_creation_and_expiration_datetime
 from validation import validate_chat_session
 
 
 router = APIRouter()
+
+
+@router.get("/chat/{session_uuid}", response_model=PublicChatSessionSchema)
+async def get_chat_session_by_uuid(
+    session_uuid: str,
+    session: AsyncSession = Depends(get_session),
+):
+    db_chat_session, error_message, http_code = await validate_chat_session(
+        session_uuid, session
+    )
+    if http_code != status.HTTP_200_OK:
+        raise HTTPException(status_code=http_code, detail=error_message)
+
+    return db_chat_session
 
 
 @router.get("/chat/{session_uuid}/messages", response_model=list[ChatMessageSchema])
@@ -28,6 +42,7 @@ async def get_chat_messages(
         select(ChatSession, ChatMessage)
         .join(ChatMessage, ChatSession.id == ChatMessage.session_id)
         .where(ChatSession.session_uuid == session_uuid)
+        .order_by(ChatMessage.id)
     )
 
     return [chat_message for _chat_session, chat_message in results]

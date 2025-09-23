@@ -1,5 +1,17 @@
 import { apiFetch } from "@/lib/api";
-import type { ChatSessionUUIDResponse, CreateChatSession } from "./types";
+import type {
+  ChatSessionResponse,
+  ChatSessionUUIDResponse,
+  CreateChatSession,
+} from "./types";
+
+async function getChatSession(
+  sessionUUID: ChatSessionResponse["session_uuid"],
+): Promise<ChatSessionResponse> {
+  return await apiFetch(`/chat/${sessionUUID}`, {
+    errorMessage: "Chat session doesn't exist or has expired",
+  });
+}
 
 function postChatSession(
   payload: CreateChatSession,
@@ -16,4 +28,4 @@ function postChatSession(
   });
 }
 
-export { postChatSession };
+export { getChatSession, postChatSession };

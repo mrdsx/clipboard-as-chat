@@ -1,6 +1,7 @@
-import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Link } from "react-router";
+import { ConnectToSessionDialog } from "./ConnectToSessionDialog";
 
 function Home() {
   return (
@@ -11,7 +12,7 @@ function Home() {
           <Button asChild>
             <Link to="/create">Create session</Link>
           </Button>
-          <Button variant="outline">Connect to session</Button>
+          <ConnectToSessionDialog />
         </CardContent>
       </Card>
     </div>

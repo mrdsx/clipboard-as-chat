@@ -19,7 +19,6 @@ function App() {
         theme={isDarkMode ? "dark" : "light"}
         position="top-right"
         richColors
-        expand
       />
       <BrowserRouter>
         <Routes>

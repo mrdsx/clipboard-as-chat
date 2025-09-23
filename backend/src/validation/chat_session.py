@@ -21,7 +21,7 @@ async def validate_chat_session(
         error_message = "Chat session not found"
         http_code = status.HTTP_404_NOT_FOUND
 
-    if db_chat_session.expires_at < datetime.now():  # type: ignore
+    elif db_chat_session.expires_at < datetime.now():  # type: ignore
         error_message = "Chat session has expired"
         http_code = status.HTTP_403_FORBIDDEN
 
