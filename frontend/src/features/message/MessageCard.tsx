@@ -6,8 +6,8 @@ import type { MessageResponse } from "./types";
 import { getMessageCreationTime } from "./utils";
 
 function MessageCard({ message }: { message: MessageResponse }) {
-  const date = new Date(message.created_at);
-  const formattedTime = getMessageCreationTime(date);
+  const createdAtDate = new Date(message.created_at);
+  const formattedTime = getMessageCreationTime(createdAtDate);
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const isCopiedTimeoutRef = useRef<NodeJS.Timeout>(undefined);
 
