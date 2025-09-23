@@ -1,24 +1,20 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToggleThemeButton } from "@/features/theme";
 import { cn } from "@/lib";
-import { useQuery } from "@tanstack/react-query";
 import { useChatContext } from "../ChatContextProvider";
-import { getChatSession } from "../services";
 import { getChatStatusStyles } from "../utils";
 import { ShareSessionDialog } from "./ShareSessionDialog";
 
 function ChatHeader() {
-  const { chatStatus, sessionUUID } = useChatContext();
+  const {
+    chatStatus,
+    chatSessionQuery: { data, isPending },
+  } = useChatContext();
   const chatStatusStyles = getChatStatusStyles(chatStatus);
-
-  const { data, isPending } = useQuery({
-    queryKey: ["get_chat_session"],
-    queryFn: () => getChatSession(sessionUUID as string),
-  });
 
   return (
     <header className="flex justify-between px-4">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-8">
         <span className="flex items-center gap-2">
           <div className={cn("size-3 rounded-full", chatStatusStyles)}></div>
           {chatStatus}
