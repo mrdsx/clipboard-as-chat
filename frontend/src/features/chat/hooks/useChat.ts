@@ -46,7 +46,8 @@ function useChat(): UseChatStatusResult {
   });
 
   function handleSendMessage(): void {
-    if (!inputRef.current || !chatSocketRef.current) return;
+    if (!inputRef.current || !chatSocketRef.current || chatStatus !== "Online")
+      return;
 
     const message = inputRef.current.value;
     if (message.trim().length === 0) return;
