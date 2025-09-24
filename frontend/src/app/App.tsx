@@ -1,25 +1,19 @@
-import { DARK_MODE_LOCAL_STORAGE_KEY } from "@/features/theme";
+import { Toaster } from "@/components/ui/sonner";
 import { Chat, CreateSession, Home } from "@/pages";
+import { useTheme } from "next-themes";
 import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
-import { Toaster } from "sonner";
 
 function App() {
-  const isDarkMode: boolean = JSON.parse(
-    localStorage.getItem(DARK_MODE_LOCAL_STORAGE_KEY) || "false",
-  );
+  const { theme } = useTheme();
 
   useEffect(() => {
-    document.body.classList.toggle("dark", isDarkMode);
-  }, []);
+    document.body.classList.toggle("dark", theme === "dark");
+  }, [theme]);
 
   return (
     <>
-      <Toaster
-        theme={isDarkMode ? "dark" : "light"}
-        position="top-right"
-        richColors
-      />
+      <Toaster position="top-right" richColors />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />

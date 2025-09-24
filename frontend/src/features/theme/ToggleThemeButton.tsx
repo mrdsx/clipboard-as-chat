@@ -1,20 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Moon, Sun } from "lucide-react";
-import { useEffect, useState } from "react";
-import { DARK_MODE_LOCAL_STORAGE_KEY } from "./constants";
+import { useTheme } from "next-themes";
 
 function ToggleThemeButton() {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() =>
-    JSON.parse(localStorage.getItem(DARK_MODE_LOCAL_STORAGE_KEY) || "false"),
-  );
-
-  useEffect(() => {
-    localStorage.setItem(DARK_MODE_LOCAL_STORAGE_KEY, String(isDarkMode));
-    document.body.classList.toggle("dark", isDarkMode);
-  }, [isDarkMode]);
+  const { theme, setTheme } = useTheme();
 
   function handleClick(): void {
-    setIsDarkMode((prev) => !prev);
+    setTheme((prev) => (prev !== "dark" ? "dark" : "light"));
   }
 
   return (
@@ -24,7 +16,7 @@ function ToggleThemeButton() {
       size="icon"
       variant="ghost"
     >
-      {isDarkMode ? <Sun /> : <Moon />}
+      {theme === "dark" ? <Sun /> : <Moon />}
     </Button>
   );
 }
