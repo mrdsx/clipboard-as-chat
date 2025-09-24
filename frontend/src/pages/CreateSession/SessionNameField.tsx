@@ -5,11 +5,11 @@ import { Label } from "@/components/ui/label";
 function SessionNameField({ ref }: React.ComponentPropsWithRef<"input">) {
   return (
     <FormField>
-      <Label htmlFor="sessionName">Session Name</Label>
+      <Label htmlFor="sessionName">Session Name (optional)</Label>
       <Input
         id="sessionName"
         type="text"
-        placeholder="My Clipboard Session"
+        placeholder="Untitled session"
         ref={ref}
       />
     </FormField>
