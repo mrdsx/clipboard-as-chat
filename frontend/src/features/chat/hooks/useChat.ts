@@ -17,10 +17,11 @@ type UseChatStatusResult = {
   chatStatus: ChatStatus;
   clientMessages: MessageResponse[] | null;
   inputRef: ReactRef<HTMLInputElement>;
-  isAtBottomRef: React.RefObject<boolean>;
+  isScrolledToBottom: boolean;
   messagesContainerRef: ReactRef<HTMLDivElement>;
   messagesQuery: UseQueryResult<MessageResponse[], Error>;
   sessionUUID: string | undefined;
+  setIsScrolledToBottom: React.Dispatch<React.SetStateAction<boolean>>;
   handleSendMessage(): void;
 };
 
@@ -32,7 +33,7 @@ function useChat(): UseChatStatusResult {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const isAtBottomRef = useRef<boolean>(true);
+  const [isScrolledToBottom, setIsScrolledToBottom] = useState<boolean>(true);
   const [chatStatus, setChatStatus] = useState<ChatStatus>("Pending");
   const [clientMessages, setClientMessages] = useState<
     MessageResponse[] | null
@@ -44,7 +45,7 @@ function useChat(): UseChatStatusResult {
   useScrollToBottomEffect({
     chatStatus,
     clientMessages,
-    isAtBottomRef,
+    isScrolledToBottom,
     messagesContainerRef,
   });
 
@@ -64,10 +65,11 @@ function useChat(): UseChatStatusResult {
     chatStatus,
     clientMessages,
     inputRef,
-    isAtBottomRef,
+    isScrolledToBottom,
     messagesContainerRef,
     messagesQuery,
     sessionUUID,
+    setIsScrolledToBottom,
     handleSendMessage,
   };
 }

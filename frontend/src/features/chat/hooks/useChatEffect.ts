@@ -80,14 +80,14 @@ function useMessageEventEffect({
 type ScrollToBottomEffectProps = {
   chatStatus: ChatStatus;
   clientMessages: MessageResponse[] | null;
-  isAtBottomRef: React.RefObject<boolean>;
+  isScrolledToBottom: boolean;
   messagesContainerRef: ReactRef<HTMLDivElement>;
 };
 
 function useScrollToBottomEffect({
   chatStatus,
   clientMessages,
-  isAtBottomRef,
+  isScrolledToBottom,
   messagesContainerRef,
 }: ScrollToBottomEffectProps): void {
   const hasInitiallyScrolledRef = useRef(false);
@@ -101,7 +101,7 @@ function useScrollToBottomEffect({
         block: "end",
       });
       hasInitiallyScrolledRef.current = true;
-    } else if (isAtBottomRef.current) {
+    } else if (isScrolledToBottom) {
       scrollToBottom(messagesContainerRef.current);
     }
   }, [chatStatus, clientMessages]);

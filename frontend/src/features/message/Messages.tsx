@@ -1,6 +1,7 @@
+import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { getIsAtBottom } from "@/lib";
-import { LoaderCircle } from "lucide-react";
+import { getIsScrolledToBottom, scrollToBottom } from "@/lib";
+import { ArrowDown, LoaderCircle } from "lucide-react";
 import { useChatContext } from "../chat";
 import { MessageCard } from "./MessageCard";
 
@@ -8,7 +9,8 @@ function Messages() {
   const {
     chatStatus,
     clientMessages: messages,
-    isAtBottomRef,
+    isScrolledToBottom,
+    setIsScrolledToBottom,
     messagesContainerRef,
   } = useChatContext();
 
@@ -16,7 +18,14 @@ function Messages() {
     e: React.UIEvent<HTMLDivElement, UIEvent>,
   ): void {
     const target = e.target as HTMLDivElement;
-    isAtBottomRef.current = getIsAtBottom(target);
+    if (!isScrolledToBottom) {
+      setIsScrolledToBottom(getIsScrolledToBottom(target));
+    } else {
+      setTimeout(
+        () => setIsScrolledToBottom(getIsScrolledToBottom(target)),
+        200,
+      );
+    }
   }
 
   if (chatStatus === "Offline") return;
@@ -30,7 +39,7 @@ function Messages() {
   }
 
   return (
-    <div className="h-full overflow-hidden">
+    <div className="relative h-full overflow-hidden">
       <ScrollArea className="h-full" onScrollCapture={handleScrollCapture}>
         <div className="grid gap-3" ref={messagesContainerRef}>
           {messages?.map((message) => (
@@ -38,6 +47,16 @@ function Messages() {
           ))}
         </div>
       </ScrollArea>
+      {!isScrolledToBottom && (
+        <Button
+          className="absolute right-2 bottom-2 size-8 border-1"
+          size="icon"
+          variant="secondary"
+          onClick={() => scrollToBottom(messagesContainerRef.current)}
+        >
+          <ArrowDown />
+        </Button>
+      )}
     </div>
   );
 }
