@@ -5,6 +5,8 @@ import { ArrowDown, LoaderCircle } from "lucide-react";
 import { useChatContext } from "../chat";
 import { MessageCard } from "./MessageCard";
 
+const TOGGLING_IS_SCROLLED_TO_BOTTOM_DELAY = 200;
+
 function Messages() {
   const {
     chatStatus,
@@ -15,15 +17,15 @@ function Messages() {
   } = useChatContext();
 
   function handleScrollCapture(
-    e: React.UIEvent<HTMLDivElement, UIEvent>,
+    event: React.UIEvent<HTMLDivElement, UIEvent>,
   ): void {
-    const target = e.target as HTMLDivElement;
+    const target = event.target as HTMLDivElement;
     if (!isScrolledToBottom) {
       setIsScrolledToBottom(getIsScrolledToBottom(target));
     } else {
       setTimeout(
         () => setIsScrolledToBottom(getIsScrolledToBottom(target)),
-        200,
+        TOGGLING_IS_SCROLLED_TO_BOTTOM_DELAY,
       );
     }
   }

@@ -11,30 +11,16 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getChatSession } from "@/features/chat";
-import { useMutation } from "@tanstack/react-query";
+import { useConnectToChatSessionMutation } from "@/features/chat";
 import { LoaderCircle } from "lucide-react";
 import { useRef } from "react";
-import { useNavigate } from "react-router";
-import { toast } from "sonner";
 
 function ConnectToSessionDialog() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const { mutate, isPending } = useConnectToChatSessionMutation();
 
-  const navigate = useNavigate();
-  const { mutate, isPending } = useMutation({
-    mutationKey: ["connect_to_session"],
-    mutationFn: getChatSession,
-    onSuccess: ({ session_uuid }) => {
-      navigate(`/chat/${session_uuid}`);
-    },
-    onError: (error: Error) => {
-      toast.error(error.message);
-    },
-  });
-
-  function handleSubmit(e: React.FormEvent): void {
-    e.preventDefault();
+  function handleSubmit(event: React.FormEvent): void {
+    event.preventDefault();
     if (!inputRef.current || inputRef.current.value.trim().length === 0) return;
 
     mutate(inputRef.current.value);

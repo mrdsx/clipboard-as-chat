@@ -6,8 +6,8 @@ import { useChatContext } from "../ChatContextProvider";
 function ChatActions() {
   const { chatStatus, inputRef, handleSendMessage } = useChatContext();
 
-  function handleKeyDown(e: React.KeyboardEvent): void {
-    if (e.key === "Enter") handleSendMessage();
+  function handleKeyDown(event: React.KeyboardEvent): void {
+    if (event.key === "Enter") handleSendMessage();
   }
 
   async function handlePaste(): Promise<void> {

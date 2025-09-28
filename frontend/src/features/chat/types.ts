@@ -20,10 +20,17 @@ type CreateChatSession = {
 
 type ExpirationTime = "15m" | "1h" | "6h" | "24h";
 
+type RecentChatSession = {
+  name: string;
+  uuid: string;
+  lastConnectionTime: string;
+};
+
 export type {
   ChatSessionResponse,
   ChatSessionUUIDResponse,
   ChatStatus,
   CreateChatSession,
   ExpirationTime,
+  RecentChatSession,
 };

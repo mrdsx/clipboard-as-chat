@@ -1,5 +1,5 @@
 import { useChatMessagesQuery, type MessageResponse } from "@/features/message";
-import { type ReactRef } from "@/lib";
+import { type ReactRef, type ReactSetState } from "@/lib";
 import type { UseQueryResult } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { useParams } from "react-router";
@@ -21,7 +21,7 @@ type UseChatStatusResult = {
   messagesContainerRef: ReactRef<HTMLDivElement>;
   messagesQuery: UseQueryResult<MessageResponse[], Error>;
   sessionUUID: string | undefined;
-  setIsScrolledToBottom: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsScrolledToBottom: ReactSetState<boolean>;
   handleSendMessage(): void;
 };
 
