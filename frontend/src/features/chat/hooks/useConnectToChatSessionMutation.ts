@@ -1,16 +1,17 @@
+import {
+  getChatSession,
+  useRecentChatSessionsContext,
+  type ChatSessionResponse,
+} from "@/features/chat";
 import { useMutation, type UseMutationResult } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
-import { getChatSession } from "../services";
-import type { ChatSessionResponse } from "../types";
-import { useRecentChatSessionsStorage } from "./useRecentChatSessionsStorage";
-
 function useConnectToChatSessionMutation(): UseMutationResult<
   ChatSessionResponse,
   Error,
   string
 > {
-  const { setRecentChatSessions } = useRecentChatSessionsStorage();
+  const { setRecentChatSessions } = useRecentChatSessionsContext();
 
   const navigate = useNavigate();
   const mutation = useMutation({

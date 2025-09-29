@@ -2,7 +2,7 @@ import type { ReactSetState } from "@/lib";
 import { useEffect, useState } from "react";
 import type { RecentChatSession } from "../types";
 
-type UseChatSessionsStorageProps = {
+type UseRecentChatSessionsStorageProps = {
   recentChatSessions: RecentChatSession[];
   setRecentChatSessions: ReactSetState<RecentChatSession[]>;
 };
@@ -10,7 +10,7 @@ type UseChatSessionsStorageProps = {
 const LOCAL_STORAGE_KEY = "recent-chat-sessions";
 const RECENT_SESSIONS_MAX_LENGTH = 10;
 
-function useRecentChatSessionsStorage(): UseChatSessionsStorageProps {
+function useRecentChatSessionsStorage(): UseRecentChatSessionsStorageProps {
   const [recentChatSessions, setRecentChatSessions] = useState<
     RecentChatSession[]
   >(() => {
@@ -33,4 +33,4 @@ function useRecentChatSessionsStorage(): UseChatSessionsStorageProps {
   return { recentChatSessions, setRecentChatSessions };
 }
 
-export { useRecentChatSessionsStorage };
+export { useRecentChatSessionsStorage, type UseRecentChatSessionsStorageProps };

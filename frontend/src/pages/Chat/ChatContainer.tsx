@@ -1,4 +1,4 @@
-import { useChatContext, useRecentChatSessionsStorage } from "@/features/chat";
+import { useChatContext, useRecentChatSessionsContext } from "@/features/chat";
 import { useEffect } from "react";
 
 function ChatContainer({ children }: React.PropsWithChildren) {
@@ -6,7 +6,7 @@ function ChatContainer({ children }: React.PropsWithChildren) {
     chatSessionQuery: { data: chatSession },
   } = useChatContext();
   const { recentChatSessions, setRecentChatSessions } =
-    useRecentChatSessionsStorage();
+    useRecentChatSessionsContext();
 
   useEffect(handleUpdateRecentChatSessions, [chatSession]);
 
