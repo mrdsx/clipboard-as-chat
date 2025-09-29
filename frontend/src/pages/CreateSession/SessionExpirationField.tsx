@@ -20,6 +20,7 @@ function SessionExpirationField({ ref }: { ref: ReactRef<ExpirationTime> }) {
   )
     ? expirationTime
     : "1h";
+  ref.current = selectDefaultValue as ExpirationTime;
 
   return (
     <FormField>
