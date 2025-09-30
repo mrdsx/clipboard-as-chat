@@ -11,7 +11,7 @@ import {
 } from "@/features/chat";
 import { X } from "lucide-react";
 import { useState } from "react";
-import { RecentSessionCard } from "./RecentSession";
+import { RecentSessionCard } from "./RecentSessionCard";
 
 function HomeSidebar() {
   const { isMobile, setOpen, setOpenMobile } = useSidebar();
