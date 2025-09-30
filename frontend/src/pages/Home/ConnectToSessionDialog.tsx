@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -52,19 +51,15 @@ function ConnectToSessionDialog() {
         </form>
         <DialogFooter className="sm:justify-between">
           <Button
+            className="w-full"
             type="submit"
             onClick={handleSubmit}
             disabled={isPending}
             aria-disabled={isPending}
           >
             {isPending && <LoaderCircle className="animate-spin" />}
-            Connect
+            {isPending ? "Connecting..." : "Connect"}
           </Button>
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              Close
-            </Button>
-          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
