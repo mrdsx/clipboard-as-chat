@@ -9,10 +9,13 @@ import {
   useClientMessagesEffect,
   useMessageEventEffect,
   useScrollToBottomEffect,
+  useShowLocalTimeEffect,
 } from "./useChatEffect";
 import { useChatSessionQuery } from "./useChatSessionQuery";
 
-type UseChatStatusResult = {
+const SHOW_LOCAL_TIME_LOCAL_STORAGE_KEY = "show-local-time";
+
+type UseChatProps = {
   chatSessionQuery: UseQueryResult<ChatSessionResponse, Error>;
   chatStatus: ChatStatus;
   clientMessages: MessageResponse[] | null;
@@ -21,11 +24,13 @@ type UseChatStatusResult = {
   messagesContainerRef: ReactRef<HTMLDivElement>;
   messagesQuery: UseQueryResult<MessageResponse[], Error>;
   sessionUUID: string | undefined;
+  showLocalTime: boolean;
+  setShowLocalTime: ReactSetState<boolean>;
   setIsScrolledToBottom: ReactSetState<boolean>;
   handleSendMessage(): void;
 };
 
-function useChat(): UseChatStatusResult {
+function useChat(): UseChatProps {
   const { sessionUUID } = useParams<{ sessionUUID: string }>();
   const chatSocketRef = useRef<WebSocket>(null);
   const chatSessionQuery = useChatSessionQuery(sessionUUID as string);
@@ -33,11 +38,18 @@ function useChat(): UseChatStatusResult {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const [isScrolledToBottom, setIsScrolledToBottom] = useState<boolean>(true);
   const [chatStatus, setChatStatus] = useState<ChatStatus>("Pending");
   const [clientMessages, setClientMessages] = useState<
     MessageResponse[] | null
   >(null);
+  const [isScrolledToBottom, setIsScrolledToBottom] = useState<boolean>(true);
+  const [showLocalTime, setShowLocalTime] = useState<boolean>(() =>
+    Boolean(
+      JSON.parse(
+        localStorage.getItem(SHOW_LOCAL_TIME_LOCAL_STORAGE_KEY) ?? "true",
+      ),
+    ),
+  );
 
   useChatStatusEffect({ chatSocketRef, sessionUUID, setChatStatus });
   useClientMessagesEffect({ messagesQuery, setClientMessages });
@@ -48,6 +60,7 @@ function useChat(): UseChatStatusResult {
     isScrolledToBottom,
     messagesContainerRef,
   });
+  useShowLocalTimeEffect({ showLocalTime });
 
   function handleSendMessage(): void {
     if (!inputRef.current || !chatSocketRef.current || chatStatus !== "Online")
@@ -69,9 +82,11 @@ function useChat(): UseChatStatusResult {
     messagesContainerRef,
     messagesQuery,
     sessionUUID,
+    showLocalTime,
     setIsScrolledToBottom,
+    setShowLocalTime,
     handleSendMessage,
   };
 }
 
-export { useChat, type UseChatStatusResult };
+export { SHOW_LOCAL_TIME_LOCAL_STORAGE_KEY, useChat, type UseChatProps };

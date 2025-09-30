@@ -1,9 +1,28 @@
 const MINUTES_IN_HOUR = 60;
 const HOURS_IN_DAY = 24;
 
-type TimeWithOffsetResult = { hoursWithOffset: number; minutesOffset: number };
+function getDaysInMonth(year: number, month: number) {
+  return new Date(year, month + 1, 0).getDate();
+}
 
-function getTimeWithOffset(date: Date): TimeWithOffsetResult {
+type TimeWithOffsetResult = {
+  hoursWithOffset: number;
+  daysOffset: number;
+  minutesOffset: number;
+};
+
+function getTimeWithOffset(
+  date: Date,
+  showLocalTime: boolean,
+): TimeWithOffsetResult {
+  if (!showLocalTime) {
+    return {
+      hoursWithOffset: date.getHours(),
+      daysOffset: 0,
+      minutesOffset: 0,
+    };
+  }
+
   const dt = new Date();
   const dateOffsetInMinutes = dt.getTimezoneOffset();
   const dateOffsetInHours = Math.floor(dateOffsetInMinutes / -MINUTES_IN_HOUR);
@@ -14,25 +33,37 @@ function getTimeWithOffset(date: Date): TimeWithOffsetResult {
   if (hoursWithOffset < HOURS_IN_DAY) {
     return {
       hoursWithOffset: hoursWithOffset,
+      daysOffset: 0,
       minutesOffset: minutesWithOffset,
     };
   }
   return {
     hoursWithOffset: hoursWithOffset - HOURS_IN_DAY,
+    daysOffset: 1,
     minutesOffset: minutesWithOffset,
   };
 }
 
-function getMessageCreationTime(date: Date): string {
-  const { hoursWithOffset, minutesOffset } = getTimeWithOffset(date);
+function getMessageCreationTime(date: Date, showLocalTime: boolean): string {
+  const { hoursWithOffset, daysOffset, minutesOffset } = getTimeWithOffset(
+    date,
+    showLocalTime,
+  );
 
-  let minutes: string | number = date.getMinutes() + minutesOffset;
-  if (String(minutes).length === 1) {
-    minutes = `0${minutes}`;
+  let daysWithOffset = date.getDate() + daysOffset;
+  let monthsOffset = 1;
+  if (daysWithOffset > getDaysInMonth(date.getFullYear(), date.getMonth())) {
+    daysWithOffset -= getDaysInMonth(date.getFullYear(), date.getMonth());
+    monthsOffset += 1;
   }
 
-  const timeString = `${hoursWithOffset}:${minutes}`;
-  const dateString = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+  let minutesWithOffset: string | number = date.getMinutes() + minutesOffset;
+  if (String(minutesWithOffset).length === 1) {
+    minutesWithOffset = `0${minutesWithOffset}`;
+  }
+
+  const timeString = `${hoursWithOffset}:${minutesWithOffset}`;
+  const dateString = `${daysWithOffset}-${date.getMonth() + monthsOffset}-${date.getFullYear()}`;
   const formattedTime = `${timeString} ${dateString}`;
 
   return formattedTime;

@@ -1,16 +1,18 @@
 import type { MessageResponse } from "@/features/message";
 import { scrollToBottom, type ReactRef, type ReactSetState } from "@/lib";
 import { BASE_API_WS_URL } from "@/lib/api";
-import type { UseQueryResult } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 import type { ChatStatus } from "../types";
+import {
+  SHOW_LOCAL_TIME_LOCAL_STORAGE_KEY,
+  type UseChatProps,
+} from "./useChat";
 
 type ChatStatusEffectProps = {
   chatSocketRef: ReactRef<WebSocket>;
-  sessionUUID: string | undefined;
   setChatStatus: ReactSetState<ChatStatus>;
-};
+} & Pick<UseChatProps, "sessionUUID">;
 
 function useChatStatusEffect({
   chatSocketRef,
@@ -31,9 +33,8 @@ function useChatStatusEffect({
 }
 
 type ClientMessagesEffectProps = {
-  messagesQuery: UseQueryResult<MessageResponse[], Error>;
   setClientMessages: ReactSetState<MessageResponse[] | null>;
-};
+} & Pick<UseChatProps, "messagesQuery">;
 
 function useClientMessagesEffect({
   messagesQuery,
@@ -77,12 +78,13 @@ function useMessageEventEffect({
   }, []);
 }
 
-type ScrollToBottomEffectProps = {
-  chatStatus: ChatStatus;
-  clientMessages: MessageResponse[] | null;
-  isScrolledToBottom: boolean;
-  messagesContainerRef: ReactRef<HTMLDivElement>;
-};
+type ScrollToBottomEffectProps = Pick<
+  UseChatProps,
+  | "chatStatus"
+  | "clientMessages"
+  | "isScrolledToBottom"
+  | "messagesContainerRef"
+>;
 
 function useScrollToBottomEffect({
   chatStatus,
@@ -107,9 +109,23 @@ function useScrollToBottomEffect({
   }, [chatStatus, clientMessages]);
 }
 
+type ShowLocalTimeEffectProps = Pick<UseChatProps, "showLocalTime">;
+
+function useShowLocalTimeEffect({
+  showLocalTime,
+}: ShowLocalTimeEffectProps): void {
+  useEffect(() => {
+    localStorage.setItem(
+      SHOW_LOCAL_TIME_LOCAL_STORAGE_KEY,
+      String(showLocalTime),
+    );
+  }, [showLocalTime]);
+}
+
 export {
   useChatStatusEffect,
   useClientMessagesEffect,
   useMessageEventEffect,
   useScrollToBottomEffect,
+  useShowLocalTimeEffect,
 };

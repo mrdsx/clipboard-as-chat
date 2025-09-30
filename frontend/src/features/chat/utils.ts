@@ -7,7 +7,7 @@ const chatStatusStyles: Record<ChatStatus, string> = {
 };
 
 function getChatStatusStyles(status: ChatStatus): string {
-  return chatStatusStyles[status] || "";
+  return chatStatusStyles[status];
 }
 
 export { getChatStatusStyles };

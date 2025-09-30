@@ -4,6 +4,7 @@ import { cn } from "@/lib";
 import { useChatContext } from "../ChatContextProvider";
 import { getChatStatusStyles } from "../utils";
 import { ShareSessionDialog } from "./ShareSessionDialog";
+import { ShowLocalTimeSwitch } from "./ShowLocalTimeSwitch";
 
 function ChatHeader() {
   const {
@@ -29,6 +30,7 @@ function ChatHeader() {
       <div className="flex items-center gap-2">
         {chatStatus === "Online" ? (
           <>
+            <ShowLocalTimeSwitch />
             <ShareSessionDialog />
             <ToggleThemeButton />
           </>

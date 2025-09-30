@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
-import { useChat, type UseChatStatusResult } from "./hooks";
+import { useChat, type UseChatProps } from "./hooks";
 
-type ChatContextType = UseChatStatusResult;
+type ChatContextType = UseChatProps;
 
 const ChatContext = createContext<ChatContextType | null>(null);
 
