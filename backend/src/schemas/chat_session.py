@@ -1,6 +1,6 @@
 from datetime import datetime
-from typing import Literal, Optional
 from pydantic import BaseModel
+from typing import Literal, Optional
 
 ExpiresIn = Literal["15m", "1h", "6h", "24h"]
 
