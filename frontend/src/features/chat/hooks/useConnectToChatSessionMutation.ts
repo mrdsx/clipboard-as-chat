@@ -1,6 +1,6 @@
 import {
   getChatSession,
-  useRecentChatSessionsContext,
+  useRecentChatSessions,
   type ChatSessionResponse,
 } from "@/features/chat";
 import { useMutation, type UseMutationResult } from "@tanstack/react-query";
@@ -11,7 +11,7 @@ function useConnectToChatSessionMutation(): UseMutationResult<
   Error,
   string
 > {
-  const { setRecentChatSessions } = useRecentChatSessionsContext();
+  const { setRecentChatSessions } = useRecentChatSessions();
 
   const navigate = useNavigate();
   const mutation = useMutation({

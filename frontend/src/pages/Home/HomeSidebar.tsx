@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/sidebar";
 import {
   useConnectToChatSessionMutation,
-  useRecentChatSessionsContext,
+  useRecentChatSessions,
 } from "@/features/chat";
 import { X } from "lucide-react";
 import { useState } from "react";
@@ -15,7 +15,7 @@ import { RecentSessionCard } from "./RecentSessionCard";
 
 function HomeSidebar() {
   const { isMobile, setOpen, setOpenMobile } = useSidebar();
-  const { recentChatSessions } = useRecentChatSessionsContext();
+  const { recentChatSessions } = useRecentChatSessions();
 
   const [targetSessionUUID, setTargetSessionUUID] = useState<string | null>(
     null,

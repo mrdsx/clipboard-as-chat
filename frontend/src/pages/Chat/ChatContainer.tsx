@@ -1,12 +1,11 @@
-import { useChatContext, useRecentChatSessionsContext } from "@/features/chat";
+import { useChatContext, useRecentChatSessions } from "@/features/chat";
 import { useEffect } from "react";
 
 function ChatContainer({ children }: React.PropsWithChildren) {
   const {
     chatSessionQuery: { data: chatSession },
   } = useChatContext();
-  const { recentChatSessions, setRecentChatSessions } =
-    useRecentChatSessionsContext();
+  const { recentChatSessions, setRecentChatSessions } = useRecentChatSessions();
 
   useEffect(handleUpdateRecentChatSessions, [chatSession]);
 

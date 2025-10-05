@@ -4,14 +4,10 @@ import {
   type UseRecentChatSessionsStorageProps,
 } from "./hooks";
 
-type RecentChatSessionsContextType = UseRecentChatSessionsStorageProps;
-
 const RecentChatSessionsContext =
-  createContext<RecentChatSessionsContextType | null>(null);
+  createContext<UseRecentChatSessionsStorageProps | null>(null);
 
-function RecentChatSessionsContextProvider({
-  children,
-}: React.PropsWithChildren) {
+function RecentChatSessionsProvider({ children }: React.PropsWithChildren) {
   const recentChatSessionsStorage = useRecentChatSessionsStorage();
 
   return (
@@ -21,15 +17,15 @@ function RecentChatSessionsContextProvider({
   );
 }
 
-function useRecentChatSessionsContext() {
+function useRecentChatSessions() {
   const context = useContext(RecentChatSessionsContext);
   if (context === null) {
     throw new Error(
-      "useRecentChatSessionsContext must be used inside RecentChatSessionsContextProvider",
+      "useRecentChatSessions must be used inside RecentChatSessionsProvider",
     );
   }
 
   return context;
 }
 
-export { RecentChatSessionsContextProvider, useRecentChatSessionsContext };
+export { RecentChatSessionsProvider, useRecentChatSessions };
