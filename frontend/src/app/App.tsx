@@ -5,10 +5,14 @@ import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
 
 function App() {
-  const { theme } = useTheme();
+  const { theme, systemTheme } = useTheme();
 
   useEffect(() => {
-    document.body.classList.toggle("dark", theme === "dark");
+    if (theme === "dark" || (theme === "system" && systemTheme === "dark")) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
   }, [theme]);
 
   return (
